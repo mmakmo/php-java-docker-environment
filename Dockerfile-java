@@ -1,0 +1,7 @@
+FROM java:openjdk-8-alpine
+
+RUN apk add --update --no-cache libstdc++ && rm /var/cache/apk/*
+
+WORKDIR /var/opt/
+
+EXPOSE 8080

@@ -1,0 +1,9 @@
+FROM php:7-alpine
+
+RUN apk --update add nodejs && rm /var/cache/apk/*
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
+RUN composer global require "laravel/installer"
+
+WORKDIR /var/opt/
+
+EXPOSE 8000

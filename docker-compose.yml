@@ -1,0 +1,76 @@
+version: "3.2"
+
+services:
+
+#   proxy:
+#     build:
+#       context: ./dockerfiles/nginx-proxy
+#       dockerfile: Dockerfile
+#     entrypoint:
+#       - tail
+#       - -f
+#       - /dev/null
+#     image: nginx-proxy
+#     container_name: nginx-proxy
+#     networks:
+#       - private-network
+#     ports:
+#       - "80:80"
+#     environment:
+#       - TZ=Asia/Tokyo
+#     volumes:
+# #      - ./logs:/var/opt/logs/
+# #      - ./src/spring/:/var/www/localhost/src/
+#       - ./src/spring/:/var/opt/spring/
+#       - ./src/laravel/:/var/opt/laravel/
+
+  webapp:
+    build:
+      context: ./
+      dockerfile: Dockerfile-php
+    image: php7-alpine
+    entrypoint:
+      - tail
+      - -f
+      - /dev/null
+    container_name: php
+    networks:
+      - private-network
+    ports:
+      - "00:8000"
+    environment:
+      - TZ=Asia/Tokyo
+      - APP_ENV=docker
+    volumes:
+     - ./src/laravel/:/var/opt/
+#     - ./logs/php-composer/PHP_Laravel.log:/var/log/laravel.log
+#     - ./logs/php-composer/PHP_Access.log:/var/log/httpd/access_log
+#     - ./logs/php-composer/PHP_Error.log:/var/log/httpd/error_log
+#     - ./logs/php-composer/PHP_npm_compile.log:/var/log/npm_compile.log
+
+  javaapp:
+    build:
+      context: ./
+      dockerfile: Dockerfile-java
+    image: java8
+    entrypoint:
+      - tail
+      - -f
+      - /dev/null
+    container_name: java
+    networks:
+      - private-network
+    ports:
+      - "82:8080"
+      - "9002:9000"
+    environment:
+      - TZ=Asia/Tokyo
+      - SPRING_PROFILES_ACTIVE=docker
+    volumes:
+     - ./src/spring/:/var/opt/
+#     - ./logs/java-tomcat/Java_build.log:/var/log/build.log
+#     - ./logs/java-tomcat/Java_app.log:/var/log/javaapp.log
+
+networks:
+  private-network:
+    driver: bridge
